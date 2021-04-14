@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: stan-modify-pg
+  name: stan-modify-pg
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stan-modify-pg
+  template:
+    metadata:
+      labels:
+        app: stan-modify-pg
+    spec:
+      containers:
+      - image: stan-modify-pg
+        name: stan-modify-pg
+        imagePullPolicy: Never
+        env:
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgresdb
+                key: postgresql-password
+          - name: PGHOST
+            value: "postgresdb.dev"
+          - name: PGUSER
+            value: "postgres"
